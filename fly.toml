@@ -1,0 +1,22 @@
+# Config Fly.io — personnalise "app" (nom unique) avant le premier déploiement.
+app = "espace-chantier-adc13"
+primary_region = "cdg"   # Paris
+
+[build]
+
+[env]
+  PORT = "3000"
+  DATA_DIR = "/data"
+
+# Disque persistant : le planning y est stocké (survit aux redéploiements).
+# Crée-le une fois :  fly volumes create espace_data --region cdg --size 1
+[[mounts]]
+  source = "espace_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0

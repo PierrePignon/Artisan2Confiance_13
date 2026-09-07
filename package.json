@@ -1,0 +1,16 @@
+{
+  "name": "espace-chantier",
+  "version": "0.1.0",
+  "description": "Espace Chantier — coordination des travaux pour Artisan de Confiance du 13",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

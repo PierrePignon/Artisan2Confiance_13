@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Espace Chantier · Artisan de Confiance du 13</title>
+<style>
+  :root{ --bg:#F1EDE6; --card:#fff; --ink:#2A231C; --sub:#6F6558; --mute:#9A8F80; --hair:rgba(42,35,28,.08);
+    --accent:#B85C2A; --field:#F3EFE8; --shadow:0 1px 2px rgba(42,35,28,.05),0 10px 30px -12px rgba(42,35,28,.16);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif; color-scheme:light; }
+  *{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;}
+  .wrap{max-width:600px;margin:0 auto;padding:40px 20px 80px;}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:26px;}
+  .brand .n{font-weight:600;font-size:17px;} .brand .num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+  .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:26px 28px;margin-top:18px;}
+  h1{font-size:26px;letter-spacing:-.02em;margin:0 0 4px;}
+  .sub{color:var(--sub);font-size:14px;}
+  .k{font-size:11.5px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+  .when{display:flex;gap:26px;margin:16px 0;flex-wrap:wrap;} .when .v{font-size:18px;font-weight:600;margin-top:3px;}
+  .btn{display:inline-block;padding:12px 20px;border-radius:100px;border:0;cursor:pointer;font:inherit;font-weight:600;font-size:14px;background:var(--field);color:var(--ink);text-decoration:none;}
+  .btn.primary{background:var(--accent);color:#fff;} .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+  .ok{color:#5f8a3e;font-weight:600;} .muted{color:var(--mute);}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:6px;}
+  .day{border-radius:14px;padding:12px 4px;text-align:center;cursor:pointer;border:1.5px solid transparent;}
+  .day .dn{font-size:12px;font-weight:700;color:var(--sub);} .day .di{font-size:18px;} .day .dl{font-size:9.5px;color:var(--mute);}
+  input[type=date]{background:var(--field);border:0;border-radius:12px;padding:11px 13px;font:inherit;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;} .chip{background:#F0E4D8;color:#8a4a24;border-radius:100px;padding:5px 11px;font-size:12.5px;}
+  @media(max-width:520px){.week{grid-template-columns:repeat(4,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><span class="n">Artisan de Confiance</span><span class="num">13</span></div>
+  <div id="app"><div class="card">Chargement…</div></div>
+</div>
+<script>
+const qs = new URLSearchParams(location.search);
+const app = document.getElementById('app');
+const J = (r) => r.json();
+const post = (u, b) => fetch(u, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(b||{}) });
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function artisan(token){
+  let d; try { d = await fetch('/api/a/'+token).then(J); } catch(e){ return err(); }
+  if (d.error) return err();
+  const iv = d.intervention, c = d.chantier;
+  const confirmed = iv.confirmation === 'confirmé';
+  app.innerHTML = `<h1>Votre intervention</h1><div class="sub">${esc(c.nom)} · ${esc(c.adresse||'')}</div>
+    <div class="card"><div style="font-size:12px;color:var(--mute);font-weight:600;text-transform:uppercase">${esc(c.nom)}</div>
+      <div style="font-size:22px;font-weight:600;margin:4px 0">${esc(iv.metier)}</div>
+      <div class="muted">Position ${iv.position} sur ${c.total}</div>
+      <div class="when"><div><div class="k">Début</div><div class="v">${fmtd(iv.dateDebut)}</div></div>
+        <div><div class="k">Fin prévue</div><div class="v">${fmtd(iv.dateFin)}</div></div>
+        <div><div class="k">Durée</div><div class="v">${iv.duree} j</div></div></div>
+      ${confirmed ? '<div class="ok">✓ Vous avez confirmé cette intervention</div>' :
+      `<div class="row"><button class="btn primary" id="ok">✓ Je confirme</button>
+        <a class="btn" href="/api/a/${token}/event.ics">📅 Ajouter à mon agenda</a></div>`}</div>`;
+  if (!confirmed) document.getElementById('ok').onclick = async () => { await post('/api/a/'+token+'/confirm'); artisan(token); };
+}
+
+async function client(token){
+  let d; try { d = await fetch('/api/c/'+token).then(J); } catch(e){ return err(); }
+  if (d.error) return err();
+  const DAYS=[['1','Lun'],['2','Mar'],['3','Mer'],['4','Jeu'],['5','Ven'],['6','Sam'],['0','Dim']];
+  const ST={keys:{l:'Clés le matin',bg:'#EAF0E1',c:'#7FA25A',ic:'🔑'},present:{l:'Je suis là',bg:'#E4ECF2',c:'#6E9BC0',ic:'🏠'},block:{l:'Pas de travaux',bg:'#F5E3DF',c:'#C4655A',ic:'🚫'}};
+  const order=['keys','present','block'];
+  function render(){
+    app.innerHTML = `<h1>Votre chantier</h1><div class="sub">${esc(d.nom)} · Livraison prévue : <b>${fmtd(d.livraison)}</b></div>
+      <div class="card"><div class="k">Ma semaine type</div><div class="sub" style="margin:8px 0 12px">Réglez une fois pour toute la durée du chantier.</div>
+        <div class="week" id="wk"></div></div>
+      <div class="card"><div class="k">Absences ponctuelles</div><div class="sub" style="margin:8px 0 10px">Vacances, jour off… uniquement les exceptions.</div>
+        <input type="date" id="exc"><div class="chips" id="chips"></div></div>
+      <div class="row"><button class="btn primary" id="save">Enregistrer mes disponibilités</button><span id="saved" class="ok" style="align-self:center"></span></div>`;
+    const wk=document.getElementById('wk');
+    DAYS.forEach(day=>{ const st=d.semaine[day[0]]||'block'; const s=ST[st];
+      const el=document.createElement('div'); el.className='day'; el.style.background=s.bg; el.style.borderColor=s.c;
+      el.innerHTML=`<div class="dn">${day[1]}</div><div class="di">${s.ic}</div><div class="dl">${s.l}</div>`;
+      el.onclick=()=>{ const i=order.indexOf(d.semaine[day[0]]); d.semaine[day[0]]=order[(i+1)%3]; render(); }; wk.appendChild(el); });
+    document.getElementById('chips').innerHTML=(d.clientIndispos||[]).map(x=>`<span class="chip">${fmtd(x)}</span>`).join('');
+    document.getElementById('exc').onchange=e=>{ if(!e.target.value)return; if(!d.clientIndispos.includes(e.target.value)){d.clientIndispos.push(e.target.value);d.clientIndispos.sort();} render(); };
+    document.getElementById('save').onclick=async()=>{ const r=await post('/api/c/'+token+'/availability',{semaine:d.semaine,clientIndispos:d.clientIndispos}).then(J); d.livraison=r.livraison; document.getElementById('saved').textContent='✓ Enregistré'; };
+  }
+  render();
+}
+
+function coordinator(){
+  app.innerHTML = `<div class="card"><h1>Espace coordinateur</h1>
+    <p class="sub">L'interface complète du coordinateur se branche ici. En attendant, l'API tourne — créez un chantier et testez les liens artisan/client.</p>
+    <p class="muted" style="font-size:13px">Artisan : <code>?a=JETON</code> · Client : <code>?c=JETON</code></p></div>`;
+}
+function err(){ app.innerHTML = '<div class="card"><h1>Lien invalide</h1><div class="sub">Ce lien n\'est plus valide. Contactez la coordination.</div></div>'; }
+function fmtd(iso){ if(!iso) return '—'; const M=['jan','fév','mar','avr','mai','juin','juil','aoû','sep','oct','nov','déc']; const p=iso.split('-'); return (+p[2])+' '+M[+p[1]-1]; }
+
+if (qs.get('a')) artisan(qs.get('a'));
+else if (qs.get('c')) client(qs.get('c'));
+else coordinator();
+</script>
+</body>
+</html>
