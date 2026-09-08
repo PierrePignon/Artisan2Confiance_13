@@ -22,6 +22,10 @@ function fmt(iso){ if(!iso) return '—'; const M=['jan','fév','mar','avr','mai
 
 app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 
+// Catalogue métiers / modèles / semaine type — pour l'interface coordinateur
+app.get('/api/meta', (req, res) => res.json({
+  metiers: engine.METIERS, templates: engine.TEMPLATES, defaultSemaine: engine.DEFAULT_SEMAINE }));
+
 app.post('/api/login', (req, res) => {
   if ((req.body || {}).password === ADMIN_PASSWORD) return res.json({ ok: true });
   res.status(401).json({ error: 'bad_password' });

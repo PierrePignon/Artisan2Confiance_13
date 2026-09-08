@@ -10,44 +10,88 @@
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif; color-scheme:light; }
   *{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;}
   .wrap{max-width:600px;margin:0 auto;padding:40px 20px 80px;}
+  .wrap.wide{max-width:820px;}
   .brand{display:flex;align-items:center;gap:10px;margin-bottom:26px;}
   .brand .n{font-weight:600;font-size:17px;} .brand .num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+  .brand .sp{flex:1;} .brand a.logout{font-size:13px;color:var(--mute);text-decoration:none;cursor:pointer;}
   .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:26px 28px;margin-top:18px;}
   h1{font-size:26px;letter-spacing:-.02em;margin:0 0 4px;}
+  h2{font-size:19px;letter-spacing:-.01em;margin:0 0 2px;}
   .sub{color:var(--sub);font-size:14px;}
   .k{font-size:11.5px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
   .when{display:flex;gap:26px;margin:16px 0;flex-wrap:wrap;} .when .v{font-size:18px;font-weight:600;margin-top:3px;}
-  .btn{display:inline-block;padding:12px 20px;border-radius:100px;border:0;cursor:pointer;font:inherit;font-weight:600;font-size:14px;background:var(--field);color:var(--ink);text-decoration:none;}
-  .btn.primary{background:var(--accent);color:#fff;} .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
-  .ok{color:#5f8a3e;font-weight:600;} .muted{color:var(--mute);}
+  .btn{display:inline-block;padding:12px 20px;border-radius:100px;border:0;cursor:pointer;font:inherit;font-weight:600;font-size:14px;background:var(--field);color:var(--ink);text-decoration:none;transition:transform .08s ease,filter .15s ease;}
+  .btn:active{transform:scale(.97);} .btn:hover{filter:brightness(.97);}
+  .btn.primary{background:var(--accent);color:#fff;} .btn.sm{padding:8px 14px;font-size:13px;}
+  .btn.ghost{background:transparent;border:1.5px solid var(--hair);color:var(--sub);}
+  .btn.icon{padding:8px 11px;font-size:14px;line-height:1;background:transparent;border:1.5px solid var(--hair);color:var(--sub);}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center;}
+  .ok{color:#5f8a3e;font-weight:600;} .muted{color:var(--mute);} .warn{color:#b5622f;font-weight:600;}
   .week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:6px;}
-  .day{border-radius:14px;padding:12px 4px;text-align:center;cursor:pointer;border:1.5px solid transparent;}
+  .day{border-radius:14px;padding:12px 4px;text-align:center;border:1.5px solid transparent;}
   .day .dn{font-size:12px;font-weight:700;color:var(--sub);} .day .di{font-size:18px;} .day .dl{font-size:9.5px;color:var(--mute);}
-  input[type=date]{background:var(--field);border:0;border-radius:12px;padding:11px 13px;font:inherit;}
+  input,select{background:var(--field);border:0;border-radius:12px;padding:11px 13px;font:inherit;color:var(--ink);width:100%;}
+  select option{background:#fff;color:#2A231C;}
+  label.lb{display:block;} label.lb .k{margin-bottom:5px;display:block;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;} @media(max-width:520px){.grid2{grid-template-columns:1fr;}}
   .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;} .chip{background:#F0E4D8;color:#8a4a24;border-radius:100px;padding:5px 11px;font-size:12.5px;}
-  @media(max-width:520px){.week{grid-template-columns:repeat(4,1fr);}}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:100px;}
+  .b-plan{background:#EDE7DC;color:#8a7f6c;} .b-sent{background:#E4ECF2;color:#4a739b;} .b-conf{background:#EAF0E1;color:#5f8a3e;} .b-late{background:#F5E3DF;color:#b5433a;}
+  /* liste chantiers */
+  .chcard{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:18px 22px;margin-top:14px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:transform .1s ease;}
+  .chcard:hover{transform:translateY(-2px);} .chcard .arrow{color:var(--mute);font-size:20px;margin-left:auto;}
+  .chcard .ci{font-size:16px;font-weight:600;} .chcard .cm{font-size:13px;color:var(--sub);margin-top:2px;}
+  /* étapes (itinéraire) */
+  .steps{margin-top:8px;}
+  .step{display:flex;gap:14px;padding:0 0 4px;}
+  .step .rail{display:flex;flex-direction:column;align-items:center;padding-top:4px;}
+  .step .dot{width:13px;height:13px;border-radius:50%;flex:none;box-shadow:0 0 0 4px var(--card);z-index:1;}
+  .step .line{width:2px;flex:1;background:var(--hair);margin:2px 0;}
+  .step:last-child .line{display:none;}
+  .step .body{flex:1;padding-bottom:20px;min-width:0;}
+  .step .mt{font-size:15.5px;font-weight:600;}
+  .step .dt{font-size:13px;color:var(--sub);margin-top:1px;}
+  .step .art{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+  @media(max-width:520px){.step .art{grid-template-columns:1fr;}}
+  .step .acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+  .copybox{display:flex;gap:8px;align-items:center;background:var(--field);border-radius:12px;padding:9px 12px;margin-top:8px;font-size:12.5px;}
+  .copybox code{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--sub);}
+  .copybox .cp{cursor:pointer;color:var(--accent);font-weight:600;flex:none;}
+  .sim{background:#FBF7F1;border:1px solid var(--hair);border-radius:14px;padding:14px 16px;margin-top:12px;font-size:13.5px;}
+  .sim .li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--hair);}
+  .sim .li:last-child{border-bottom:0;}
+  .hr{height:1px;background:var(--hair);margin:22px 0;}
+  .empty{text-align:center;color:var(--mute);padding:30px 0;}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:100px;font-size:13.5px;box-shadow:var(--shadow);opacity:0;transition:opacity .2s ease;pointer-events:none;z-index:50;}
+  .toast.show{opacity:1;}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="brand"><span class="n">Artisan de Confiance</span><span class="num">13</span></div>
+<div class="wrap" id="wrapEl">
+  <div class="brand"><span class="n">Artisan de Confiance</span><span class="num">13</span><span class="sp"></span><a class="logout" id="logout" hidden>Déconnexion</a></div>
   <div id="app"><div class="card">Chargement…</div></div>
 </div>
+<div class="toast" id="toast"></div>
 <script>
 const qs = new URLSearchParams(location.search);
 const app = document.getElementById('app');
+const wrapEl = document.getElementById('wrapEl');
+const logoutEl = document.getElementById('logout');
 const J = (r) => r.json();
 const post = (u, b) => fetch(u, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(b||{}) });
-
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function fmtd(iso){ if(!iso) return '—'; const M=['jan','fév','mar','avr','mai','juin','juil','aoû','sep','oct','nov','déc']; const p=String(iso).split('-'); return (+p[2])+' '+M[+p[1]-1]; }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1900); }
+function copy(txt){ try{ navigator.clipboard.writeText(txt); toast('Lien copié'); }catch(e){ toast('Copie impossible — sélectionnez le lien'); } }
 
+/* ============ PAGE ARTISAN (lien perso) ============ */
 async function artisan(token){
   let d; try { d = await fetch('/api/a/'+token).then(J); } catch(e){ return err(); }
   if (d.error) return err();
   const iv = d.intervention, c = d.chantier;
   const confirmed = iv.confirmation === 'confirmé';
   app.innerHTML = `<h1>Votre intervention</h1><div class="sub">${esc(c.nom)} · ${esc(c.adresse||'')}</div>
-    <div class="card"><div style="font-size:12px;color:var(--mute);font-weight:600;text-transform:uppercase">${esc(c.nom)}</div>
+    <div class="card"><div class="k">${esc(c.nom)}</div>
       <div style="font-size:22px;font-weight:600;margin:4px 0">${esc(iv.metier)}</div>
       <div class="muted">Position ${iv.position} sur ${c.total}</div>
       <div class="when"><div><div class="k">Début</div><div class="v">${fmtd(iv.dateDebut)}</div></div>
@@ -59,6 +103,7 @@ async function artisan(token){
   if (!confirmed) document.getElementById('ok').onclick = async () => { await post('/api/a/'+token+'/confirm'); artisan(token); };
 }
 
+/* ============ PAGE CLIENT (lien perso) ============ */
 async function client(token){
   let d; try { d = await fetch('/api/c/'+token).then(J); } catch(e){ return err(); }
   if (d.error) return err();
@@ -67,7 +112,7 @@ async function client(token){
   const order=['keys','present','block'];
   function render(){
     app.innerHTML = `<h1>Votre chantier</h1><div class="sub">${esc(d.nom)} · Livraison prévue : <b>${fmtd(d.livraison)}</b></div>
-      <div class="card"><div class="k">Ma semaine type</div><div class="sub" style="margin:8px 0 12px">Réglez une fois pour toute la durée du chantier.</div>
+      <div class="card"><div class="k">Ma semaine type</div><div class="sub" style="margin:8px 0 12px">Réglez une fois pour toute la durée du chantier. Touchez un jour pour changer.</div>
         <div class="week" id="wk"></div></div>
       <div class="card"><div class="k">Absences ponctuelles</div><div class="sub" style="margin:8px 0 10px">Vacances, jour off… uniquement les exceptions.</div>
         <input type="date" id="exc"><div class="chips" id="chips"></div></div>
@@ -76,6 +121,7 @@ async function client(token){
     DAYS.forEach(day=>{ const st=d.semaine[day[0]]||'block'; const s=ST[st];
       const el=document.createElement('div'); el.className='day'; el.style.background=s.bg; el.style.borderColor=s.c;
       el.innerHTML=`<div class="dn">${day[1]}</div><div class="di">${s.ic}</div><div class="dl">${s.l}</div>`;
+      el.style.cursor='pointer';
       el.onclick=()=>{ const i=order.indexOf(d.semaine[day[0]]); d.semaine[day[0]]=order[(i+1)%3]; render(); }; wk.appendChild(el); });
     document.getElementById('chips').innerHTML=(d.clientIndispos||[]).map(x=>`<span class="chip">${fmtd(x)}</span>`).join('');
     document.getElementById('exc').onchange=e=>{ if(!e.target.value)return; if(!d.clientIndispos.includes(e.target.value)){d.clientIndispos.push(e.target.value);d.clientIndispos.sort();} render(); };
@@ -84,17 +130,246 @@ async function client(token){
   render();
 }
 
-function coordinator(){
-  app.innerHTML = `<div class="card"><h1>Espace coordinateur</h1>
-    <p class="sub">L'interface complète du coordinateur se branche ici. En attendant, l'API tourne — créez un chantier et testez les liens artisan/client.</p>
-    <p class="muted" style="font-size:13px">Artisan : <code>?a=JETON</code> · Client : <code>?c=JETON</code></p></div>`;
+/* ============ COORDINATEUR ============ */
+let PW = null, META = null, STATE = null;
+function auth(){ return { 'authorization': 'Bearer ' + PW, 'content-type':'application/json' }; }
+async function api(path, opts){
+  const r = await fetch(path, Object.assign({ headers: auth() }, opts||{}));
+  if (r.status === 401){ PW=null; sessionStorage.removeItem('adc_pw'); login('Session expirée, reconnectez-vous.'); throw new Error('401'); }
+  return r.json();
 }
-function err(){ app.innerHTML = '<div class="card"><h1>Lien invalide</h1><div class="sub">Ce lien n\'est plus valide. Contactez la coordination.</div></div>'; }
-function fmtd(iso){ if(!iso) return '—'; const M=['jan','fév','mar','avr','mai','juin','juil','aoû','sep','oct','nov','déc']; const p=iso.split('-'); return (+p[2])+' '+M[+p[1]-1]; }
+const DAYNAMES=[['1','Lun'],['2','Mar'],['3','Mer'],['4','Jeu'],['5','Ven'],['6','Sam'],['0','Dim']];
+const SEM_ST={keys:{l:'Clés',bg:'#EAF0E1',c:'#7FA25A',ic:'🔑'},present:{l:'Présent',bg:'#E4ECF2',c:'#6E9BC0',ic:'🏠'},block:{l:'Fermé',bg:'#F5E3DF',c:'#C4655A',ic:'🚫'}};
 
+function badge(it){
+  if (it.confirmation==='confirmé') return '<span class="badge b-conf">✓ Confirmé</span>';
+  if (it.statut==='planifié') return '<span class="badge b-sent">✉ Convoqué</span>';
+  if (it.confirmation==='autre') return '<span class="badge b-late">↺ Autre date proposée</span>';
+  return '<span class="badge b-plan">À planifier</span>';
+}
+function metierLabel(k){ return (META.metiers[k]||{}).l || k; }
+function metierColor(k){ return (META.metiers[k]||{}).c || '#B0A392'; }
+
+/* ---- connexion ---- */
+function login(msg){
+  logoutEl.hidden = true; wrapEl.classList.remove('wide');
+  app.innerHTML = `<div class="card">
+    <h1>Espace coordinateur</h1>
+    <p class="sub">Accès réservé à la coordination.</p>
+    ${msg?`<p class="warn" style="font-size:13.5px">${esc(msg)}</p>`:''}
+    <div style="margin-top:16px"><label class="lb"><span class="k">Mot de passe</span>
+      <input type="password" id="pw" placeholder="••••••••" autofocus></label></div>
+    <div class="row"><button class="btn primary" id="go">Se connecter</button><span id="e" class="warn"></span></div>
+  </div>`;
+  const pw=document.getElementById('pw');
+  const go=async()=>{
+    const val=pw.value; if(!val) return;
+    const r=await post('/api/login',{password:val});
+    if(!r.ok){ document.getElementById('e').textContent='Mot de passe incorrect'; pw.value=''; pw.focus(); return; }
+    PW=val; sessionStorage.setItem('adc_pw', val); await boot();
+  };
+  document.getElementById('go').onclick=go;
+  pw.onkeydown=e=>{ if(e.key==='Enter') go(); };
+}
+
+async function boot(){
+  logoutEl.hidden=false;
+  try{ if(!META) META = await fetch('/api/meta').then(J); STATE = await api('/api/state'); }
+  catch(e){ return; }
+  dashboard();
+}
+
+/* ---- tableau de bord ---- */
+function dashboard(){
+  wrapEl.classList.remove('wide');
+  const ids = STATE.order || [];
+  const cards = ids.map(id=>{
+    const ch=STATE.chantiers[id]; if(!ch) return '';
+    const n=ch.interventions.length, conf=ch.interventions.filter(x=>x.confirmation==='confirmé').length;
+    const liv=n?ch.interventions[n-1].dateFin:'';
+    return `<div class="chcard" data-id="${id}">
+      <div><div class="ci">${esc(ch.nom||'Chantier')}</div>
+        <div class="cm">${esc(ch.type||'')}${ch.client?' · '+esc(ch.client):''} · ${n} corps de métier · ${conf}/${n} confirmés</div>
+        <div class="cm">Livraison prévue : <b>${fmtd(liv)}</b></div></div>
+      <span class="arrow">›</span></div>`;
+  }).join('');
+  app.innerHTML = `<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div><h1>Chantiers</h1><div class="sub">${ids.length} chantier${ids.length>1?'s':''} en cours</div></div>
+      <button class="btn primary" id="new">+ Nouveau chantier</button></div>
+    ${ids.length? cards : '<div class="card"><div class="empty">Aucun chantier pour l\'instant.<br>Créez-en un pour lancer la coordination.</div></div>'}`;
+  document.getElementById('new').onclick=createForm;
+  app.querySelectorAll('.chcard').forEach(el=> el.onclick=()=>detail(el.dataset.id));
+}
+
+/* ---- création ---- */
+function createForm(){
+  const types=Object.keys(META.templates);
+  const today=new Date(); const iso=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  app.innerHTML=`<a class="btn ghost sm" id="back">‹ Retour</a>
+    <div class="card"><h1>Nouveau chantier</h1><div class="sub">Le planning des corps de métier est généré automatiquement selon le type de projet.</div>
+      <div style="margin-top:18px" class="grid2">
+        <label class="lb"><span class="k">Nom du chantier</span><input id="nom" placeholder="Salle de bain — Villa Aix"></label>
+        <label class="lb"><span class="k">Type de projet</span><select id="type">${types.map(t=>`<option>${esc(t)}</option>`).join('')}</select></label>
+        <label class="lb"><span class="k">Client</span><input id="client" placeholder="M. et Mme Dupont"></label>
+        <label class="lb"><span class="k">Email du client</span><input id="cemail" type="email" placeholder="client@email.fr"></label>
+        <label class="lb" style="grid-column:1/-1"><span class="k">Adresse</span><input id="adr" placeholder="12 chemin des Oliviers, Aix-en-Provence"></label>
+        <label class="lb"><span class="k">Date de début</span><input id="deb" type="date" value="${iso}"></label>
+      </div>
+      <div class="row"><button class="btn primary" id="cr">Créer le chantier</button><span id="e" class="warn"></span></div>
+    </div>`;
+  document.getElementById('back').onclick=dashboard;
+  document.getElementById('cr').onclick=async()=>{
+    const body={ nom:val('nom'), type:val('type'), client:val('client'), clientEmail:val('cemail'), adresse:val('adr'), dateDebut:val('deb') };
+    if(!body.nom || !body.dateDebut){ document.getElementById('e').textContent='Nom et date de début requis'; return; }
+    const r=await api('/api/chantiers',{method:'POST',body:JSON.stringify(body)});
+    STATE=await api('/api/state'); detail(r.chantier.id);
+  };
+  function val(id){ return document.getElementById(id).value.trim(); }
+}
+
+/* ---- sauvegarde de l'état complet (déclenche le ré-ordonnancement serveur) ---- */
+async function saveState(){ await api('/api/state',{method:'PUT',body:JSON.stringify(STATE)}); STATE=await api('/api/state'); }
+
+/* ---- détail d'un chantier ---- */
+function detail(id){
+  wrapEl.classList.add('wide');
+  const ch=STATE.chantiers[id]; if(!ch) return dashboard();
+  const n=ch.interventions.length; const liv=n?ch.interventions[n-1].dateFin:'';
+  const clientLink=location.origin+'/?c='+ch.clientToken;
+  const addable=Object.keys(META.metiers);
+
+  const steps=ch.interventions.map((it,i)=>`
+    <div class="step" data-i="${i}">
+      <div class="rail"><span class="dot" style="background:${metierColor(it.key)}"></span><span class="line"></span></div>
+      <div class="body">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="mt">${esc(metierLabel(it.key))}</span>${badge(it)}
+        </div>
+        <div class="dt">${fmtd(it.dateDebut)} → ${fmtd(it.dateFin)} · <span class="muted">durée</span>
+          <input type="number" min="1" value="${it.duree||1}" data-dur="${i}" style="width:56px;display:inline-block;padding:4px 8px;margin:0 2px">
+          <span class="muted">j</span></div>
+        <div class="art">
+          <input placeholder="Nom de l'artisan" value="${esc(it.artisanNom||'')}" data-nom="${i}">
+          <input placeholder="Email de l'artisan" type="email" value="${esc(it.artisanEmail||'')}" data-mail="${i}">
+        </div>
+        <div class="acts">
+          <button class="btn primary sm" data-notify="${i}">✉ Convoquer</button>
+          <button class="btn sm" data-delay="${i}">⏱ Retard</button>
+          <button class="btn icon" data-up="${i}" title="Monter">▲</button>
+          <button class="btn icon" data-down="${i}" title="Descendre">▼</button>
+          <button class="btn icon" data-del="${i}" title="Retirer">✕</button>
+          <span class="cp muted" data-alink="${i}" style="cursor:pointer;font-size:12.5px">🔗 lien artisan</span>
+        </div>
+        <div class="sim" data-simbox="${i}" hidden></div>
+      </div>
+    </div>`).join('');
+
+  const sem=ch.semaine||META.defaultSemaine;
+  const semView=DAYNAMES.map(d=>{ const s=SEM_ST[sem[d[0]]||'block'];
+    return `<div class="day" style="background:${s.bg};border-color:${s.c}"><div class="dn">${d[1]}</div><div class="di">${s.ic}</div><div class="dl">${s.l}</div></div>`; }).join('');
+  const indispos=(ch.clientIndispos||[]).map(x=>`<span class="chip">${fmtd(x)}</span>`).join('') || '<span class="muted" style="font-size:13px">Aucune absence signalée</span>';
+
+  app.innerHTML=`<a class="btn ghost sm" id="back">‹ Tous les chantiers</a>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start">
+        <div><h1 style="margin-bottom:2px">${esc(ch.nom||'Chantier')}</h1>
+          <div class="sub">${esc(ch.type||'')}${ch.adresse?' · '+esc(ch.adresse):''}${ch.client?' · '+esc(ch.client):''}</div></div>
+        <button class="btn primary" id="save">Enregistrer</button>
+      </div>
+      <div class="when">
+        <div><div class="k">Début</div><div class="v">${fmtd(ch.dateDebut)}</div></div>
+        <div><div class="k">Livraison prévue</div><div class="v">${fmtd(liv)}</div></div>
+        <div><div class="k">Corps de métier</div><div class="v">${n}</div></div>
+      </div>
+      <div class="copybox"><code>${esc(clientLink)}</code><span class="cp" id="cpclient">Copier le lien client</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Déroulé du chantier</h2>
+      <div class="sub" style="margin-bottom:14px">Ordre des corps de métier, dates calculées automatiquement. Modifiez une durée, l'artisan, ou l'ordre, puis <b>Enregistrer</b> pour recalculer.</div>
+      <div class="steps">${steps || '<div class="empty">Aucun corps de métier. Ajoutez-en un ci-dessous.</div>'}</div>
+      <div class="hr"></div>
+      <div class="row" style="margin-top:0">
+        <select id="addk" style="max-width:280px">${addable.map(k=>`<option value="${k}">${esc(META.metiers[k].l)}</option>`).join('')}</select>
+        <button class="btn sm" id="addbtn">+ Ajouter un corps de métier</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Disponibilités du client</h2>
+      <div class="sub" style="margin-bottom:12px">Réglées par le client via son lien. En lecture seule ici.</div>
+      <div class="k">Semaine type</div>
+      <div class="week" style="margin:8px 0 16px">${semView}</div>
+      <div class="k">Absences ponctuelles</div>
+      <div class="chips">${indispos}</div>
+      ${ch.clientMessage?`<div class="k" style="margin-top:16px">Message du client</div><div class="sub" style="margin-top:5px">${esc(ch.clientMessage)}</div>`:''}
+    </div>`;
+
+  document.getElementById('back').onclick=dashboard;
+  document.getElementById('save').onclick=async()=>{ collect(ch); await saveState(); toast('Planning enregistré'); detail(id); };
+  document.getElementById('cpclient').onclick=()=>copy(clientLink);
+  document.getElementById('addbtn').onclick=async()=>{ const k=document.getElementById('addk').value;
+    ch.interventions.push(newIv(k)); await saveState(); detail(id); };
+
+  // inputs artisan/durée : on collecte au clic sur les actions
+  app.querySelectorAll('[data-up]').forEach(b=>b.onclick=async()=>{ const i=+b.dataset.up; if(i<=0)return; collect(ch);
+    [ch.interventions[i-1],ch.interventions[i]]=[ch.interventions[i],ch.interventions[i-1]]; await saveState(); detail(id); });
+  app.querySelectorAll('[data-down]').forEach(b=>b.onclick=async()=>{ const i=+b.dataset.down; if(i>=ch.interventions.length-1)return; collect(ch);
+    [ch.interventions[i+1],ch.interventions[i]]=[ch.interventions[i],ch.interventions[i+1]]; await saveState(); detail(id); });
+  app.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{ const i=+b.dataset.del; collect(ch);
+    ch.interventions.splice(i,1); await saveState(); detail(id); });
+  app.querySelectorAll('[data-alink]').forEach(s=>s.onclick=()=>{ const i=+s.dataset.alink; copy(location.origin+'/?a='+ch.interventions[i].token); });
+  app.querySelectorAll('[data-notify]').forEach(b=>b.onclick=async()=>{ const i=+b.dataset.notify; const it=ch.interventions[i];
+    collect(ch); if(!it.artisanEmail){ toast('Renseignez l\'email de l\'artisan'); return; }
+    await saveState(); const r=await api('/api/interventions/'+it.id+'/notify',{method:'POST',body:'{}'});
+    toast(r.dryRun?'Convocation prête (mode test — mail non envoyé)':'Convocation envoyée à l\'artisan'); detail(id); });
+  app.querySelectorAll('[data-delay]').forEach(b=>b.onclick=()=>delayFlow(ch,+b.dataset.delay,id));
+
+  function collect(ch){ app.querySelectorAll('[data-nom]').forEach(inp=>{ ch.interventions[+inp.dataset.nom].artisanNom=inp.value.trim(); });
+    app.querySelectorAll('[data-mail]').forEach(inp=>{ ch.interventions[+inp.dataset.mail].artisanEmail=inp.value.trim(); });
+    app.querySelectorAll('[data-dur]').forEach(inp=>{ ch.interventions[+inp.dataset.dur].duree=Math.max(1,parseInt(inp.value)||1); }); }
+}
+
+/* ---- retard : simulation puis application (cascade) ---- */
+async function delayFlow(ch, idx, id){
+  const box=app.querySelector('[data-simbox="'+idx+'"]');
+  box.hidden=false;
+  box.innerHTML=`<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <span>Retard de</span><input type="number" min="1" value="1" id="dd" style="width:64px;padding:6px 10px">
+    <span>jour(s) ouvré(s)</span><button class="btn sm" id="simb">Simuler l'impact</button>
+    <span class="cp muted" id="cancelsim" style="cursor:pointer">annuler</span></div>
+    <div id="simres"></div>`;
+  document.getElementById('cancelsim').onclick=()=>{ box.hidden=true; box.innerHTML=''; };
+  document.getElementById('simb').onclick=async()=>{
+    const addDays=Math.max(1,parseInt(document.getElementById('dd').value)||1);
+    const it=ch.interventions[idx];
+    const r=await api('/api/interventions/'+it.id+'/delay',{method:'POST',body:JSON.stringify({addDays,apply:false})});
+    const moved=r.sim.filter(s=>s.changed);
+    const reconf=r.sim.filter(s=>s.changed && s.wasConfirmed && !s.isDelayed);
+    const lines=r.sim.map(s=>`<div class="li"><span>${esc(metierLabel(s.metier))}${s.isDelayed?' <span class="warn">(retardé)</span>':''}</span>
+      <span>${fmtd(s.oldD)} → <b>${fmtd(s.newD)}</b></span></div>`).join('');
+    document.getElementById('simres').innerHTML=`<div style="margin-top:12px">${lines}</div>
+      <div class="sub" style="margin-top:10px">${moved.length} intervention(s) décalée(s).${reconf.length?` <span class="warn">${reconf.length} artisan(s) déjà confirmé(s) devront re-confirmer</span> — ils seront à reconvoquer.`:''}</div>
+      <div class="row"><button class="btn primary sm" id="applyb">Appliquer le décalage</button>
+        <span class="muted" style="font-size:12.5px">Les artisans en aval sont à reconvoquer après application.</span></div>`;
+    document.getElementById('applyb').onclick=async()=>{
+      await api('/api/interventions/'+it.id+'/delay',{method:'POST',body:JSON.stringify({addDays,apply:true})});
+      STATE=await api('/api/state'); toast('Décalage appliqué'); detail(id);
+    };
+  };
+}
+
+/* ---- utilitaires création intervention côté client ---- */
+function randHex(n){ const a=new Uint8Array(n); (crypto.getRandomValues?crypto.getRandomValues(a):a.forEach((_,i)=>a[i]=Math.floor(Math.random()*256))); return Array.from(a).map(b=>b.toString(16).padStart(2,'0')).join(''); }
+function newIv(key){ const m=META.metiers[key]||{d:2}; return { id:'c'+Date.now().toString(36)+randHex(3), key, duree:m.d, artisanNom:'', artisanEmail:'', statut:'à planifier', indispos:[], dateDebut:'', dateFin:'', confirmation:null, token:randHex(16) }; }
+
+function err(){ app.innerHTML = '<div class="card"><h1>Lien invalide</h1><div class="sub">Ce lien n\'est plus valide. Contactez la coordination.</div></div>'; }
+
+/* ---- routage ---- */
+logoutEl.onclick=()=>{ PW=null; sessionStorage.removeItem('adc_pw'); login(); };
 if (qs.get('a')) artisan(qs.get('a'));
 else if (qs.get('c')) client(qs.get('c'));
-else coordinator();
+else { PW = sessionStorage.getItem('adc_pw'); if(PW) boot(); else login(); }
 </script>
 </body>
 </html>

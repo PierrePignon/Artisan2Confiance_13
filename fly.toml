@@ -1,22 +1,28 @@
-# Config Fly.io — personnalise "app" (nom unique) avant le premier déploiement.
-app = "espace-chantier-adc13"
-primary_region = "cdg"   # Paris
+# fly.toml app configuration file generated for espace-chantier-adc13 on 2026-09-07T21:21:03+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'espace-chantier-adc13'
+primary_region = 'cdg'
 
 [build]
-
 [env]
-  PORT = "3000"
-  DATA_DIR = "/data"
+  DATA_DIR = '/data'
+  PORT = '3000'
 
-# Disque persistant : le planning y est stocké (survit aux redéploiements).
-# Crée-le une fois :  fly volumes create espace_data --region cdg --size 1
 [[mounts]]
-  source = "espace_data"
-  destination = "/data"
+  source = 'espace_data'
+  destination = '/data'
 
 [http_service]
   internal_port = 3000
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
+
+[[vm]]
+  memory = '1gb'
+  cpus = 1
+  memory_mb = 1024
