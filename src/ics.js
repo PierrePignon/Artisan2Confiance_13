@@ -12,7 +12,7 @@ function buildICS(ev){
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Artisan de Confiance 13//Espace Chantier//FR',
+    'PRODID:-//Réseaux Artisans de Confiance 13//Espace Chantier//FR',
     'CALSCALE:GREGORIAN',
     'METHOD:REQUEST',
     'BEGIN:VEVENT',

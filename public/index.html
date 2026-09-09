@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Espace Chantier · Artisan de Confiance du 13</title>
+<title>Espace Chantier · Réseaux Artisans de Confiance 13</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap');
   :root{
@@ -167,7 +167,7 @@
 </head>
 <body>
 <header>
-  <div class="brand"><span class="name">Artisan de Confiance</span><span class="num">13</span></div>
+  <div class="brand"><span class="name">Réseaux Artisans de Confiance</span><span class="num">13</span></div>
   <a class="logout" id="logout" hidden>Déconnexion</a>
 </header>
 
@@ -409,7 +409,7 @@
       "Dans le cadre du chantier « "+ch.nom+" » ("+(ch.adresse||'adresse à confirmer')+"), votre intervention ("+m.l+") est planifiée :\n\n"+
       "  • Début : "+fmt(it.dateDebut)+"\n  • Fin prévue : "+fmt(it.dateFin)+"\n  • Durée : "+(it.duree||1)+" jours ouvrés\n"+
       "  • Position : "+(idx+1)+" sur "+ch.interventions.length+"\n\n"+
-      "Confirmez votre disponibilité en un clic depuis votre lien personnel.\n\nBien à vous,\nArtisan de Confiance du 13 — Coordination";
+      "Confirmez votre disponibilité en un clic depuis votre lien personnel.\n\nBien à vous,\nRéseaux Artisans de Confiance 13 — Coordination";
     var ov=el('<div class="overlay"></div>');
     ov.innerHTML='<div class="modal"><h3>Convocation</h3><div class="msub">À : '+esc(it.artisanNom||'(artisan)')+(it.artisanEmail?' — '+esc(it.artisanEmail):'')+'</div><textarea id="mb" readonly></textarea>'+
       '<div class="mact"><button class="chip-btn" id="mC">Fermer</button><button class="chip-btn primary" id="mSend">Envoyer la convocation</button></div>'+

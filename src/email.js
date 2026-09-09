@@ -3,13 +3,13 @@
 // Config par variables d'environnement :
 //   BREVO_API_KEY   = ta clé API Brevo (obligatoire pour envoyer pour de vrai)
 //   MAIL_FROM       = adresse expéditeur validée dans Brevo (ex: contact@artisandeconfiance13.fr)
-//   MAIL_FROM_NAME  = nom affiché (ex: Artisan de Confiance du 13)
+//   MAIL_FROM_NAME  = nom affiché (ex: Réseaux Artisans de Confiance 13)
 // Sans clé, on passe en "dry-run" : on logue l'email au lieu de l'envoyer (pratique pour tester).
 
 async function sendEmail({ to, toName, subject, html, text, ics, icsFilename }) {
   const key = process.env.BREVO_API_KEY;
   const from = process.env.MAIL_FROM || 'no-reply@example.com';
-  const fromName = process.env.MAIL_FROM_NAME || 'Artisan de Confiance du 13';
+  const fromName = process.env.MAIL_FROM_NAME || 'Réseaux Artisans de Confiance 13';
 
   const attachment = ics ? [{ content: Buffer.from(ics, 'utf8').toString('base64'),
     name: icsFilename || 'rendez-vous.ics' }] : undefined;

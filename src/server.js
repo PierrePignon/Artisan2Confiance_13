@@ -72,7 +72,7 @@ Dans le cadre du chantier « ${ch.nom} » (${ch.adresse || 'adresse à confirmer
 Confirmez votre disponibilité en un clic : ${link}
 
 Bien à vous,
-Artisan de Confiance du 13 — Coordination`;
+Réseaux Artisans de Confiance 13 — Coordination`;
   const ics = buildICS({ uid: it.id + '@adc13', title: `Chantier « ${ch.nom} » — ${m.l}`,
     description: `Intervention ${m.l}. Confirmez : ${link}`, location: ch.adresse || '',
     startISO: it.dateDebut, endISO: it.dateFin });
