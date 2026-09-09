@@ -312,6 +312,7 @@
       '<span class="datepick">Début&nbsp; <input type="date" id="chStart" value="'+esc(ch.dateDebut||'')+'"></span>'+
       '<span class="datepick">Tampon&nbsp; <select id="chBuf">'+[0,1,2].map(function(v){return '<option value="'+v+'"'+(v===(ch.buffer||0)?' selected':'')+'>'+v+' j</option>';}).join('')+'</select></span>'+
       '<button class="chip-btn primary" id="recalc">↻ Recalculer</button>'+
+      '<span class="datepick">Email particulier&nbsp; <input type="email" id="chEmail" placeholder="client@email.fr" value="'+esc(ch.clientEmail||'')+'" style="min-width:190px"></span>'+
       '<button class="chip-btn" id="sendClient">✉ Envoyer le lien au particulier</button>'+
       '<button class="chip-btn" id="cpClient">🔗 Copier</button>'+
       '<button class="chip-btn danger" id="delCh">Supprimer</button>'+
@@ -321,8 +322,10 @@
     hero.querySelector('#chBuf').addEventListener('change',function(e){ ch.buffer=parseInt(e.target.value)||0; schedule(ch); persist(); render(); });
     hero.querySelector('#chStart').addEventListener('change',function(e){ ch.dateDebut=e.target.value; schedule(ch); persist(); render(); });
     hero.querySelector('#cpClient').addEventListener('click',function(){ copy(clientLink); });
+    hero.querySelector('#chEmail').addEventListener('change',function(e){ ch.clientEmail=e.target.value.trim(); persist(); });
     hero.querySelector('#sendClient').addEventListener('click',function(){ var b=this;
-      if(!ch.clientEmail){ toast('Renseignez l\'email du particulier (à la création du chantier)'); return; }
+      var mail=(ch.clientEmail||'').trim();
+      if(!mail || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){ toast('Email du particulier invalide — corrigez le champ « Email particulier »'); return; }
       b.textContent='Envoi…';
       apiSEND('/api/chantiers/'+ch.id+'/notify-client','POST').then(function(r){ toast(r&&r.dryRun?'Lien prêt (mode test — voir les logs)':'Lien envoyé au particulier'); b.textContent='✉ Envoyer le lien au particulier'; }).catch(function(){ toast('Échec de l\'envoi'); b.textContent='✉ Envoyer le lien au particulier'; }); });
     hero.querySelector('#delCh').addEventListener('click',function(){ if(!confirm('Supprimer ce chantier ?')) return; delete state.chantiers[currentId]; state.order=state.order.filter(function(x){return x!==currentId;}); currentId=state.order[0]||null; persist(); render(); });
@@ -422,7 +425,8 @@
     ov.addEventListener('click',function(e){ if(e.target===ov) closeModal(); });
     ov.querySelector('#mC').addEventListener('click',closeModal);
     ov.querySelector('#mSend').addEventListener('click',function(){
-      if(!it.artisanEmail){ toast('Renseignez d\'abord l\'email de l\'artisan'); return; }
+      var am=(it.artisanEmail||'').trim();
+      if(!am || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(am)){ toast('Email de l\'artisan invalide — corrigez-le dans la fiche intervention'); return; }
       var btn=ov.querySelector('#mSend'); btn.textContent='Envoi…';
       apiSEND('/api/state','PUT',state).then(function(){ return apiSEND('/api/interventions/'+it.id+'/notify','POST'); }).then(function(r){
         closeModal(); toast(r&&r.dryRun?'Convocation prête (mode test — voir logs)':'Convocation envoyée'); return apiGET('/api/state');
