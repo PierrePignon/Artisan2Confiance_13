@@ -312,7 +312,8 @@
       '<span class="datepick">Début&nbsp; <input type="date" id="chStart" value="'+esc(ch.dateDebut||'')+'"></span>'+
       '<span class="datepick">Tampon&nbsp; <select id="chBuf">'+[0,1,2].map(function(v){return '<option value="'+v+'"'+(v===(ch.buffer||0)?' selected':'')+'>'+v+' j</option>';}).join('')+'</select></span>'+
       '<button class="chip-btn primary" id="recalc">↻ Recalculer</button>'+
-      '<button class="chip-btn" id="cpClient">🔗 Lien du particulier</button>'+
+      '<button class="chip-btn" id="sendClient">✉ Envoyer le lien au particulier</button>'+
+      '<button class="chip-btn" id="cpClient">🔗 Copier</button>'+
       '<button class="chip-btn danger" id="delCh">Supprimer</button>'+
       '</div>';
     m.appendChild(hero);
@@ -320,6 +321,10 @@
     hero.querySelector('#chBuf').addEventListener('change',function(e){ ch.buffer=parseInt(e.target.value)||0; schedule(ch); persist(); render(); });
     hero.querySelector('#chStart').addEventListener('change',function(e){ ch.dateDebut=e.target.value; schedule(ch); persist(); render(); });
     hero.querySelector('#cpClient').addEventListener('click',function(){ copy(clientLink); });
+    hero.querySelector('#sendClient').addEventListener('click',function(){ var b=this;
+      if(!ch.clientEmail){ toast('Renseignez l\'email du particulier (à la création du chantier)'); return; }
+      b.textContent='Envoi…';
+      apiSEND('/api/chantiers/'+ch.id+'/notify-client','POST').then(function(r){ toast(r&&r.dryRun?'Lien prêt (mode test — voir les logs)':'Lien envoyé au particulier'); b.textContent='✉ Envoyer le lien au particulier'; }).catch(function(){ toast('Échec de l\'envoi'); b.textContent='✉ Envoyer le lien au particulier'; }); });
     hero.querySelector('#delCh').addEventListener('click',function(){ if(!confirm('Supprimer ce chantier ?')) return; delete state.chantiers[currentId]; state.order=state.order.filter(function(x){return x!==currentId;}); currentId=state.order[0]||null; persist(); render(); });
 
     m.insertAdjacentHTML('beforeend', ganttHTML(chGanttItems(ch)));
@@ -347,7 +352,7 @@
           '</div>'+
           '<div class="indispo"><label>Indisponibilités de l\'artisan</label><div class="add"><input type="date" data-di></div>'+
             '<div class="chips">'+(it.indispos||[]).map(function(d){return '<span class="chip">'+fmt(d)+' <button data-rm="'+d+'">×</button></span>';}).join('')+'</div></div>'+
-          '<div class="ivactions"><button class="mini" data-up>↑ Monter</button><button class="mini" data-down>↓ Descendre</button><button class="mini mail" data-mail>✉ Convoquer</button><button class="mini" data-delay>⏱ Signaler un retard</button><button class="mini" data-link>🔗 Lien artisan</button><button class="mini del" data-del>Retirer</button></div>'+
+          '<div class="ivactions"><button class="mini" data-up>↑ Monter</button><button class="mini" data-down>↓ Descendre</button><button class="mini mail" data-mail>✉ Convoquer</button><button class="mini" data-delay>⏱ Signaler un retard</button><button class="mini del" data-del>Retirer</button></div>'+
         '</div>';
       iv.querySelector('.ivhead').addEventListener('click',function(e){ if(e.target.closest('.stpill')) return; openIv=open?null:it.id; render(); });
       iv.querySelectorAll('[data-f]').forEach(function(inp){ inp.addEventListener('change',function(){ var f=inp.getAttribute('data-f'); it[f]= f==='duree'?Math.max(1,parseInt(inp.value)||1):inp.value; if(f==='duree') schedule(ch); persist(); render(); }); });
@@ -356,7 +361,6 @@
       iv.querySelector('[data-up]').addEventListener('click',function(){ if(idx>0){ var a=ch.interventions; a.splice(idx-1,0,a.splice(idx,1)[0]); schedule(ch); persist(); render(); } });
       iv.querySelector('[data-down]').addEventListener('click',function(){ var a=ch.interventions; if(idx<a.length-1){ a.splice(idx+1,0,a.splice(idx,1)[0]); schedule(ch); persist(); render(); } });
       iv.querySelector('[data-del]').addEventListener('click',function(){ ch.interventions.splice(idx,1); if(openIv===it.id) openIv=null; schedule(ch); persist(); render(); });
-      iv.querySelector('[data-link]').addEventListener('click',function(){ copy(location.origin+'/?a='+it.token); });
       iv.querySelector('[data-mail]').addEventListener('click',function(){ openMail(ch,it,idx); });
       iv.querySelector('[data-delay]').addEventListener('click',function(){ openDelay(ch,idx); });
       list.appendChild(iv);

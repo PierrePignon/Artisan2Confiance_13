@@ -85,6 +85,32 @@ Réseaux Artisans de Confiance 13 — Coordination`;
   } catch (e) { res.status(502).json({ error: 'email_failed', message: e.message }); }
 });
 
+// Envoyer au particulier son lien de suivi
+app.post('/api/chantiers/:id/notify-client', admin, async (req, res) => {
+  const s = store.get(); const ch = s.chantiers[req.params.id];
+  if (!ch) return res.status(404).json({ error: 'not_found' });
+  if (!ch.clientEmail) return res.status(400).json({ error: 'no_email' });
+  const link = BASE_URL + '/?c=' + ch.clientToken;
+  const liv = engine.livraison(ch);
+  const text = `Bonjour${ch.client ? ' ' + ch.client : ''},
+
+Votre chantier « ${ch.nom} »${ch.adresse ? ' (' + ch.adresse + ')' : ''} est suivi via votre espace personnel.
+
+Depuis votre lien, vous pouvez régler vos disponibilités (les jours où vous êtes présent, où vous déposez les clés) et suivre l'avancement des travaux.${liv ? `
+
+  • Livraison prévue : ${fmt(liv)}` : ''}
+
+Votre espace personnel : ${link}
+
+Bien à vous,
+Réseaux Artisans de Confiance 13 — Coordination`;
+  try {
+    const r = await sendEmail({ to: ch.clientEmail, toName: ch.client || '',
+      subject: `Votre chantier « ${ch.nom} » — espace de suivi`, text });
+    res.json({ ok: true, dryRun: !!r.dryRun });
+  } catch (e) { res.status(502).json({ error: 'email_failed', message: e.message }); }
+});
+
 // Simuler / appliquer un retard
 app.post('/api/interventions/:id/delay', admin, (req, res) => {
   const s = store.get(); let found = null;
