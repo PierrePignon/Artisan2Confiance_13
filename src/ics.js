@@ -14,7 +14,7 @@ function buildICS(ev){
     'VERSION:2.0',
     'PRODID:-//Réseaux Artisans de Confiance 13//Espace Chantier//FR',
     'CALSCALE:GREGORIAN',
-    'METHOD:REQUEST',
+    'METHOD:PUBLISH',
     'BEGIN:VEVENT',
     'UID:' + (ev.uid || (Date.now()+'@artisandeconfiance13')),
     'DTSTAMP:' + now,
@@ -23,6 +23,8 @@ function buildICS(ev){
     'SUMMARY:' + esc(ev.title),
     'DESCRIPTION:' + esc(ev.description),
     'LOCATION:' + esc(ev.location),
+    'STATUS:CONFIRMED',
+    'TRANSP:TRANSPARENT',
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\r\n');

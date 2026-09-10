@@ -19,6 +19,40 @@ function admin(req, res, next){
   res.status(401).json({ error: 'unauthorized' });
 }
 function fmt(iso){ if(!iso) return '—'; const M=['jan','fév','mar','avr','mai','juin','juil','aoû','sep','oct','nov','déc']; const p=iso.split('-'); return (+p[2])+' '+M[+p[1]-1]; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// Gabarit email HTML — sobre, un seul bouton d'action bien visible.
+function emailShell({ title, greeting, intro, rows, ctaLabel, ctaUrl, outro, secondaryLabel, secondaryUrl }){
+  const rowsHtml = (rows || []).map(r =>
+    '<tr><td style="padding:4px 0;color:#8a857c;font-size:13px;width:150px;vertical-align:top">' + esc(r[0]) + '</td>' +
+    '<td style="padding:4px 0;color:#26251f;font-size:14px;font-weight:600">' + esc(r[1]) + '</td></tr>').join('');
+  const btn = ctaUrl ? (
+    '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:26px 0 6px"><tr>' +
+    '<td style="border-radius:9px;background:#26251f"><a href="' + esc(ctaUrl) + '" ' +
+    'style="display:inline-block;padding:14px 30px;font-family:Georgia,\'Times New Roman\',serif;font-size:15px;color:#ffffff;text-decoration:none;border-radius:9px;letter-spacing:.2px">' +
+    esc(ctaLabel) + '</a></td></tr></table>') : '';
+  const secondary = secondaryUrl ? (
+    '<p style="margin:8px 0 0"><a href="' + esc(secondaryUrl) + '" style="color:#8a6d3b;font-size:13px;text-decoration:underline">' + esc(secondaryLabel) + '</a></p>') : '';
+  const fallback = ctaUrl ? (
+    '<p style="margin:22px 0 0;color:#b3ada2;font-size:12px;line-height:1.5">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>' +
+    '<span style="color:#8a6d3b;word-break:break-all">' + esc(ctaUrl) + '</span></p>') : '';
+  return '<!doctype html><html><body style="margin:0;background:#f4f1ea;padding:28px 12px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">' +
+    '<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #ece7dd">' +
+    '<tr><td style="background:#26251f;padding:20px 32px"><span style="font-family:Georgia,serif;color:#f4f1ea;font-size:15px;letter-spacing:.5px">Réseaux Artisans de Confiance 13</span></td></tr>' +
+    '<tr><td style="padding:32px 32px 34px;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif">' +
+    '<h1 style="margin:0 0 18px;font-family:Georgia,\'Times New Roman\',serif;font-size:22px;color:#26251f;font-weight:600;line-height:1.25">' + esc(title) + '</h1>' +
+    '<p style="margin:0 0 6px;color:#26251f;font-size:15px">' + esc(greeting) + '</p>' +
+    (intro ? '<p style="margin:0 0 14px;color:#4a463e;font-size:14px;line-height:1.6">' + esc(intro) + '</p>' : '') +
+    (rowsHtml ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 2px;border-top:1px solid #ece7dd;border-bottom:1px solid #ece7dd;width:100%">' +
+      '<tr><td style="padding:12px 0"><table role="presentation" cellpadding="0" cellspacing="0" width="100%">' + rowsHtml + '</table></td></tr></table>' : '') +
+    btn + secondary + fallback +
+    (outro ? '<p style="margin:24px 0 0;color:#4a463e;font-size:14px;line-height:1.6">' + esc(outro) + '</p>' : '') +
+    '<p style="margin:26px 0 0;color:#8a857c;font-size:13px">Bien à vous,<br>Réseaux Artisans de Confiance 13 — Coordination</p>' +
+    '</td></tr></table>' +
+    '<p style="margin:16px 0 0;color:#b3ada2;font-size:11px;font-family:-apple-system,Segoe UI,Arial,sans-serif">Réseaux Artisans de Confiance 13 · Bouches-du-Rhône</p>' +
+    '</td></tr></table></body></html>';
+}
 
 app.get('/api/health', (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 
@@ -73,12 +107,20 @@ Confirmez votre disponibilité en un clic : ${link}
 
 Bien à vous,
 Réseaux Artisans de Confiance 13 — Coordination`;
+  const html = emailShell({
+    title: `Intervention planifiée — ${m.l}`,
+    greeting: `Bonjour ${it.artisanNom ? it.artisanNom.split(' ')[0] : ''},`.trim(),
+    intro: `Dans le cadre du chantier « ${ch.nom} »${ch.adresse ? ' (' + ch.adresse + ')' : ''}, votre intervention est planifiée aux dates suivantes.`,
+    rows: [ ['Corps de métier', m.l], ['Début', fmt(it.dateDebut)], ['Fin prévue', fmt(it.dateFin)],
+      ['Durée', (it.duree || 1) + ' jours ouvrés'], ['Position', (idx + 1) + ' sur ' + ch.interventions.length] ],
+    ctaLabel: 'Confirmer ma disponibilité', ctaUrl: link,
+    outro: 'Vous pouvez aussi proposer une autre date depuis ce lien. Une invitation agenda (.ics) est jointe à cet email pour ajouter l\'intervention à votre calendrier.' });
   const ics = buildICS({ uid: it.id + '@adc13', title: `Chantier « ${ch.nom} » — ${m.l}`,
     description: `Intervention ${m.l}. Confirmez : ${link}`, location: ch.adresse || '',
     startISO: it.dateDebut, endISO: it.dateFin });
   try {
     const r = await sendEmail({ to: it.artisanEmail, toName: it.artisanNom,
-      subject: `Planning chantier « ${ch.nom} » — ${m.l}`, text,
+      subject: `Planning chantier « ${ch.nom} » — ${m.l}`, text, html,
       ics, icsFilename: 'intervention.ics' });
     it.statut = it.statut === 'à planifier' ? 'planifié' : it.statut; store.save();
     res.json({ ok: true, dryRun: !!r.dryRun });
@@ -104,9 +146,15 @@ Votre espace personnel : ${link}
 
 Bien à vous,
 Réseaux Artisans de Confiance 13 — Coordination`;
+  const html = emailShell({
+    title: `Votre espace de suivi — « ${ch.nom} »`,
+    greeting: `Bonjour${ch.client ? ' ' + ch.client : ''},`,
+    intro: `Votre chantier${ch.adresse ? ' (' + ch.adresse + ')' : ''} est désormais suivi via votre espace personnel. Depuis votre lien, vous réglez vos disponibilités (jours de présence, remise des clés) et suivez l'avancement des travaux en temps réel.`,
+    rows: liv ? [ ['Livraison prévue', fmt(liv)] ] : null,
+    ctaLabel: 'Accéder à mon espace', ctaUrl: link });
   try {
     const r = await sendEmail({ to: ch.clientEmail, toName: ch.client || '',
-      subject: `Votre chantier « ${ch.nom} » — espace de suivi`, text });
+      subject: `Votre chantier « ${ch.nom} » — espace de suivi`, text, html });
     res.json({ ok: true, dryRun: !!r.dryRun });
   } catch (e) { res.status(502).json({ error: 'email_failed', message: e.message }); }
 });
