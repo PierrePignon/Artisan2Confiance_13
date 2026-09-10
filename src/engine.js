@@ -46,29 +46,40 @@ function nextOpen(ch, d, ind){ const x=new Date(d); let g=0; while(!dayOpen(ch,x
 function addOpen(ch, s, n, ind){ let x=nextOpen(ch,s,ind), c=1; while(c<n){ x.setDate(x.getDate()+1); x=nextOpen(ch,x,ind); c++; } return x; }
 
 // ---- Ordonnancement d'un chantier ----
+// Une intervention marquée { parallel:true } démarre à la même date que la
+// précédente (les deux corps de métier travaillent en même temps). L'intervention
+// séquentielle suivante reprend après la FIN LA PLUS TARDIVE du groupe parallèle.
 function schedule(ch){
   const cur0 = parse(ch.dateDebut); if(!cur0) return;
   const cl = ch.clientIndispos || [];
-  let cur = cur0;
-  for (const it of ch.interventions){
+  let cur = cur0;        // date de départ de la prochaine intervention séquentielle
+  let prevStart = null;  // date de début de l'intervention précédente (pour le parallèle)
+  ch.interventions.forEach((it, i) => {
     const ind = new Set(cl.concat(it.indispos || []));
-    const st = nextOpen(ch, cur, ind);
+    const par = !!it.parallel && i > 0 && prevStart;
+    const st = nextOpen(ch, par ? prevStart : cur, ind);
     const en = addOpen(ch, st, Math.max(1, it.duree || 1), ind);
     it.dateDebut = iso(st); it.dateFin = iso(en);
-    cur = new Date(en); cur.setDate(cur.getDate() + 1 + (ch.buffer || 0));
-  }
+    prevStart = st;
+    const after = new Date(en); after.setDate(after.getDate() + 1 + (ch.buffer || 0));
+    if (par) { if (after > cur) cur = after; } else { cur = after; }
+  });
 }
 
 // ---- Simulation d'un retard (recalcul du aval, sans muter) ----
 function simulateDelay(ch, idx, addDays){
   const cl = ch.clientIndispos || [], its = ch.interventions, out = [];
   let cur = parse(its[idx].dateDebut);
+  let prevStart = idx > 0 ? parse(its[idx-1].dateDebut) : null;
   for (let j = idx; j < its.length; j++){
     const it = its[j], ind = new Set(cl.concat(it.indispos || [])), extra = (j===idx) ? addDays : 0;
-    const st = nextOpen(ch, cur, ind), en = addOpen(ch, st, Math.max(1, (it.duree||1)+extra), ind);
+    const par = !!it.parallel && j > 0 && prevStart;
+    const st = nextOpen(ch, par ? prevStart : cur, ind), en = addOpen(ch, st, Math.max(1, (it.duree||1)+extra), ind);
     out.push({ id: it.id, metier: it.key, oldD: it.dateDebut, oldF: it.dateFin, newD: iso(st), newF: iso(en),
       changed: (iso(st)!==it.dateDebut || iso(en)!==it.dateFin), wasConfirmed: (it.confirmation==='confirmé'), isDelayed: (j===idx) });
-    cur = new Date(en); cur.setDate(cur.getDate() + 1 + (ch.buffer || 0));
+    prevStart = st;
+    const after = new Date(en); after.setDate(after.getDate() + 1 + (ch.buffer || 0));
+    if (par) { if (after > cur) cur = after; } else { cur = after; }
   }
   return out;
 }
@@ -79,7 +90,7 @@ function uid(){ return 'c' + Date.now().toString(36) + crypto.randomBytes(3).toS
 function newIntervention(key){
   const m = METIERS[key] || { l:key, d:2 };
   return { id: uid(), key, duree: m.d, artisanNom:'', artisanEmail:'', statut:'à planifier',
-    indispos: [], dateDebut:'', dateFin:'', confirmation: null, token: token() };
+    indispos: [], parallel: false, dateDebut:'', dateFin:'', confirmation: null, token: token() };
 }
 
 function createChantier(data){

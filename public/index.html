@@ -99,6 +99,8 @@
   .mini:hover{background:#EAE4DA;}
   .mini.mail{background:var(--accent-soft); color:#8a4a24;}
   .mini.del:hover{background:#f6d9d2; color:#B23B2E;}
+  .mini.par.on{background:#26251f; color:#f4f1ea;}
+  .parmark{color:var(--accent); font-weight:600;}
 
   .addrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:8px; padding:16px 10px 4px;}
   .addrow span{font-size:13px; color:var(--mute); font-weight:600;}
@@ -275,11 +277,11 @@
     ax+='</div>';
     var rows='';
     items.forEach(function(i){ var left=0,w=0; if(i.dateDebut&&i.dateFin){ left=dbetween(min,parse(i.dateDebut))/total*100; w=(dbetween(parse(i.dateDebut),parse(i.dateFin))+1)/total*100; }
-      rows+='<div class="grow"><div class="gl"><span class="dot" style="background:'+(i.c||'#bbb')+'"></span>'+esc(i.l)+'</div><div class="gtrack"><div class="gbar" style="left:'+left.toFixed(1)+'%;width:'+Math.max(3,w).toFixed(1)+'%;background:'+(i.c||'#bbb')+'"></div></div></div>';
+      rows+='<div class="grow"><div class="gl"><span class="dot" style="background:'+(i.c||'#bbb')+'"></span>'+esc(i.l)+(i.parallel?' <span class="parmark">⇄</span>':'')+'</div><div class="gtrack"><div class="gbar" style="left:'+left.toFixed(1)+'%;width:'+Math.max(3,w).toFixed(1)+'%;background:'+(i.c||'#bbb')+'"></div></div></div>';
     });
     return '<div class="card"><div class="ct">Planning</div><div class="gantt">'+ax+rows+'</div></div>';
   }
-  function chGanttItems(ch){ return ch.interventions.map(function(i){ var m=METIERS[i.key]||{l:i.key,c:'#bbb'}; return {l:m.l,c:m.c,dateDebut:i.dateDebut,dateFin:i.dateFin}; }); }
+  function chGanttItems(ch){ return ch.interventions.map(function(i){ var m=METIERS[i.key]||{l:i.key,c:'#bbb'}; return {l:m.l,c:m.c,dateDebut:i.dateDebut,dateFin:i.dateFin,parallel:i.parallel}; }); }
 
   /* ---------- COORDINATEUR ---------- */
   function renderSide(){
@@ -341,7 +343,7 @@
         '<div class="ivhead">'+
           '<div class="ord">'+pad(idx+1)+'</div>'+
           '<div class="mid"><div class="mn"><span class="dot" style="background:'+mm.c+'"></span>'+esc(mm.l)+'</div>'+
-            '<div class="sub">'+fmt(it.dateDebut)+' → '+fmt(it.dateFin)+' · '+(it.duree||1)+' j'+(it.artisanNom?' · '+esc(it.artisanNom):' · à assigner')+'</div></div>'+
+            '<div class="sub">'+fmt(it.dateDebut)+' → '+fmt(it.dateFin)+' · '+(it.duree||1)+' j'+(it.artisanNom?' · '+esc(it.artisanNom):' · à assigner')+(it.parallel?' · <span class="parmark">⇄ en parallèle</span>':'')+'</div></div>'+
           '<div class="right"><span class="stpill" style="background:'+sc+'22;color:'+sc+'"><span class="d" style="background:'+sc+'"></span>'+esc(st)+'</span><span class="chev">▾</span></div>'+
         '</div>'+
         '<div class="ivbody">'+
@@ -355,7 +357,9 @@
           '</div>'+
           '<div class="indispo"><label>Indisponibilités de l\'artisan</label><div class="add"><input type="date" data-di></div>'+
             '<div class="chips">'+(it.indispos||[]).map(function(d){return '<span class="chip">'+fmt(d)+' <button data-rm="'+d+'">×</button></span>';}).join('')+'</div></div>'+
-          '<div class="ivactions"><button class="mini" data-up>↑ Monter</button><button class="mini" data-down>↓ Descendre</button><button class="mini mail" data-mail>✉ Convoquer</button><button class="mini" data-delay>⏱ Signaler un retard</button><button class="mini del" data-del>Retirer</button></div>'+
+          '<div class="ivactions"><button class="mini" data-up>↑ Monter</button><button class="mini" data-down>↓ Descendre</button>'+
+            (idx>0?'<button class="mini par'+(it.parallel?' on':'')+'" data-par>⇄ '+(it.parallel?'En parallèle ✓':'Paralléliser')+'</button>':'')+
+            '<button class="mini mail" data-mail>✉ Convoquer</button><button class="mini" data-delay>⏱ Signaler un retard</button><button class="mini del" data-del>Retirer</button></div>'+
         '</div>';
       iv.querySelector('.ivhead').addEventListener('click',function(e){ if(e.target.closest('.stpill')) return; openIv=open?null:it.id; render(); });
       iv.querySelectorAll('[data-f]').forEach(function(inp){ inp.addEventListener('change',function(){ var f=inp.getAttribute('data-f'); it[f]= f==='duree'?Math.max(1,parseInt(inp.value)||1):inp.value; if(f==='duree') schedule(ch); persist(); render(); }); });
@@ -364,6 +368,7 @@
       iv.querySelector('[data-up]').addEventListener('click',function(){ if(idx>0){ var a=ch.interventions; a.splice(idx-1,0,a.splice(idx,1)[0]); schedule(ch); persist(); render(); } });
       iv.querySelector('[data-down]').addEventListener('click',function(){ var a=ch.interventions; if(idx<a.length-1){ a.splice(idx+1,0,a.splice(idx,1)[0]); schedule(ch); persist(); render(); } });
       iv.querySelector('[data-del]').addEventListener('click',function(){ ch.interventions.splice(idx,1); if(openIv===it.id) openIv=null; schedule(ch); persist(); render(); });
+      var pb=iv.querySelector('[data-par]'); if(pb) pb.addEventListener('click',function(){ it.parallel=!it.parallel; schedule(ch); persist(); render(); });
       iv.querySelector('[data-mail]').addEventListener('click',function(){ openMail(ch,it,idx); });
       iv.querySelector('[data-delay]').addEventListener('click',function(){ openDelay(ch,idx); });
       list.appendChild(iv);
