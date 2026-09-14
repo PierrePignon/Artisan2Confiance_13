@@ -218,7 +218,7 @@
   function dayOpen(ch,d,ind){ var sem=ch.semaine||DSEM; if((sem[String(d.getDay())]||'keys')==='block') return false; if(ind&&ind.has(iso(d))) return false; return true; }
   function nextOpen(ch,d,ind){ var x=new Date(d),g=0; while(!dayOpen(ch,x,ind)){ x.setDate(x.getDate()+1); if(++g>2000) break; } return x; }
   function addOpen(ch,s,n,ind){ var x=nextOpen(ch,s,ind),c=1; while(c<n){ x.setDate(x.getDate()+1); x=nextOpen(ch,x,ind); c++; } return x; }
-  function schedule(ch){ var cur=parse(ch.dateDebut); if(!cur) return; var cl=ch.clientIndispos||[]; ch.interventions.forEach(function(it){ var ind=new Set(cl.concat(it.indispos||[])); var st=nextOpen(ch,cur,ind); var en=addOpen(ch,st,Math.max(1,it.duree||1),ind); it.dateDebut=iso(st); it.dateFin=iso(en); cur=new Date(en); cur.setDate(cur.getDate()+1+(ch.buffer||0)); }); }
+  function schedule(ch){ var cur=parse(ch.dateDebut); if(!cur) return; var cl=ch.clientIndispos||[]; var prevStart=null; ch.interventions.forEach(function(it,i){ var ind=new Set(cl.concat(it.indispos||[])); var par=!!it.parallel&&i>0&&prevStart; var st=nextOpen(ch, par?prevStart:cur, ind); var en=addOpen(ch,st,Math.max(1,it.duree||1),ind); it.dateDebut=iso(st); it.dateFin=iso(en); prevStart=st; var after=new Date(en); after.setDate(after.getDate()+1+(ch.buffer||0)); if(par){ if(after>cur) cur=after; } else { cur=after; } }); }
   function nextWork(d){ var x=new Date(d); while(x.getDay()===0||x.getDay()===6) x.setDate(x.getDate()+1); return x; }
   function newIv(k){ var m=METIERS[k]||{l:k,d:2}; return {id:uid(),key:k,duree:m.d,artisanNom:'',artisanEmail:'',statut:'à planifier',indispos:[],dateDebut:'',dateFin:'',confirmation:null,token:randHex(16)}; }
 
