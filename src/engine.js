@@ -56,13 +56,16 @@ function schedule(ch){
   let prevStart = null;  // date de début de l'intervention précédente (pour le parallèle)
   ch.interventions.forEach((it, i) => {
     const ind = new Set(cl.concat(it.indispos || []));
-    const par = !!it.parallel && i > 0 && prevStart;
-    const st = nextOpen(ch, par ? prevStart : cur, ind);
+    let base;
+    if (it.dateImposee) base = parse(it.dateImposee);
+    else if (!!it.parallel && i > 0 && prevStart) base = prevStart;
+    else base = cur;
+    const st = nextOpen(ch, base, ind);
     const en = addOpen(ch, st, Math.max(1, it.duree || 1), ind);
     it.dateDebut = iso(st); it.dateFin = iso(en);
     prevStart = st;
     const after = new Date(en); after.setDate(after.getDate() + 1 + (ch.buffer || 0));
-    if (par) { if (after > cur) cur = after; } else { cur = after; }
+    if (after > cur) cur = after;
   });
 }
 
@@ -90,7 +93,7 @@ function uid(){ return 'c' + Date.now().toString(36) + crypto.randomBytes(3).toS
 function newIntervention(key){
   const m = METIERS[key] || { l:key, d:2 };
   return { id: uid(), key, duree: m.d, artisanNom:'', artisanEmail:'', statut:'à planifier',
-    indispos: [], parallel: false, dateDebut:'', dateFin:'', confirmation: null, token: token() };
+    indispos: [], parallel: false, dateImposee:'', dateDebut:'', dateFin:'', confirmation: null, token: token() };
 }
 
 function createChantier(data){
