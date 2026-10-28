@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr" class="nojs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plombier de confiance — Bouches-du-Rhône | Artisan de Confiance</title>
+<meta name="description" content="Dépannage, recherche de fuite, installation sanitaire et rénovation : un réseau de plombiers de confiance à Marseille, Aix-en-Provence et dans tout le 13.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='26' fill='%231a4a6e'/%3E%3Ctext x='50' y='63' font-size='42' font-family='Georgia,serif' font-weight='700' fill='%23c6a052' text-anchor='middle'%3EAC%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --soft:#f5f4ef; --card:#ffffff;
+  --ink:#1d1d1f; --ink2:#3a3a3c; --muted:#6e6e73; --faint:#a1a1a6;
+  --blue:#1a4a6e; --blue-d:#123752; --blue-soft:#eaf0f5;
+  --gold:#c6a052; --gold-d:#9a7a2c; --gold-soft:#f3ead6;
+  --accent:#2f74c0; --accent-soft:#e7f0f9;   /* couleur du métier : Plomberie */
+  --line:rgba(0,0,0,.09); --line-s:rgba(0,0,0,.055);
+  --r:20px;
+  --sh:0 30px 64px -34px rgba(20,30,45,.3); --sh-s:0 14px 34px -20px rgba(20,30,45,.2);
+  --fd:'Manrope',system-ui,-apple-system,sans-serif;
+  --fb:'Inter',system-ui,-apple-system,sans-serif;
+  --wrap:1180px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:var(--fb);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+svg{display:block}img{max-width:100%}
+h1,h2,h3{font-family:var(--fd);color:var(--ink);margin:0;line-height:1.1;letter-spacing:-.025em;text-wrap:balance;font-weight:800}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(22px,env(safe-area-inset-left));padding-right:max(22px,env(safe-area-inset-right))}
+.eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--accent);text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:9px;white-space:nowrap;padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;cursor:pointer;border:0;transition:transform .16s,box-shadow .22s,background .18s}
+.btn svg{width:18px;height:18px}
+.btn.g{background:var(--blue);color:#fff;box-shadow:0 14px 30px -16px rgba(26,74,110,.8)}
+.btn.g:hover{transform:translateY(-2px);background:var(--blue-d)}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{transform:translateY(-2px);box-shadow:var(--sh-s)}
+
+/* header (solide) */
+.hdr{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-s)}
+.hdr .in{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:11px}
+.logo .s{width:38px;height:38px;border-radius:11px;background:var(--blue);display:grid;place-items:center;color:#fff;font-family:var(--fd);font-weight:800;font-size:15px}
+.logo b{font-family:var(--fd);font-weight:800;font-size:17px;color:var(--ink);line-height:1;white-space:nowrap}
+.logo span{display:block;font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
+.menu{display:flex;align-items:center;gap:26px;font-size:14.5px;font-weight:500}
+.menu a.lk{color:var(--ink2)}.menu a.lk:hover{color:var(--blue)}
+.menu a.mgmt{display:inline-flex;align-items:center;gap:6px;font-weight:600}.menu a.mgmt svg{width:15px;height:15px}
+.burger{display:none;background:none;border:0;cursor:pointer;color:var(--ink);padding:8px}.burger svg{width:26px;height:26px}
+
+/* hero métier */
+.mhero{background:var(--soft);border-bottom:1px solid var(--line-s)}
+.mhero .in{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:center;padding:clamp(34px,6vh,64px) 0}
+.crumb{font-size:13.5px;color:var(--muted);margin-bottom:20px}
+.crumb a:hover{color:var(--accent)}
+.crumb span{color:var(--ink2);font-weight:500}
+.mbadge{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px}
+.mbadge .ic{width:50px;height:50px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center}
+.mbadge .ic svg{width:26px;height:26px}
+.mbadge .fam{font-size:12.5px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.04em}
+.mhero h1{font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-.03em}
+.mhero .lead{font-size:clamp(16px,1.5vw,18.5px);color:var(--ink2);margin-top:18px;line-height:1.6;max-width:50ch}
+.mhero .lead b{color:var(--ink);font-weight:600}
+.mcta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.mvis{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:linear-gradient(150deg,var(--accent-soft),#dfe9f3);display:grid;place-items:center;box-shadow:var(--sh)}
+.mvis .big{width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.65);display:grid;place-items:center;color:var(--accent)}
+.mvis .big svg{width:64px;height:64px}
+.mvis .ph{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(40,60,90,.45);font-weight:600}
+
+/* sections */
+.sec{padding:clamp(56px,8vh,96px) 0}
+.sec.soft{background:var(--soft)}
+.shead{max-width:680px;margin:0 auto 44px;text-align:center}
+.shead h2{font-size:clamp(27px,3.4vw,40px);margin-top:14px;font-weight:800;letter-spacing:-.02em}
+.shead p{color:var(--muted);font-size:16.5px;margin-top:14px;line-height:1.6}
+
+.igrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.icard{background:var(--card);border:1px solid var(--line-s);border-radius:var(--r);padding:28px 24px;transition:transform .25s,box-shadow .25s}
+.icard:hover{transform:translateY(-5px);box-shadow:var(--sh-s)}
+.icard .ic{width:48px;height:48px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:16px}
+.icard .ic svg{width:23px;height:23px}
+.icard h3{font-size:17px;font-weight:700;margin-bottom:7px;letter-spacing:-.01em}
+.icard p{font-size:14px;color:var(--muted);line-height:1.55}
+
+/* plus-value callout */
+.pv{display:flex;gap:20px;align-items:center;background:var(--blue);color:#fff;border-radius:var(--r);padding:34px 38px;box-shadow:var(--sh);max-width:960px;margin:0 auto}
+.pv .ic{width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.pv .ic svg{width:27px;height:27px}
+.pv b{font-family:var(--fd);font-size:clamp(18px,2.2vw,23px);font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.pv p{color:#cfe0ee;font-size:14.5px;margin-top:7px;line-height:1.5}
+
+/* faq */
+.faq{max-width:780px;margin:0 auto}
+.qa{background:var(--card);border:1px solid var(--line-s);border-radius:16px;padding:20px 22px;margin-bottom:12px}
+.qa b{font-family:var(--fd);font-size:16.5px;font-weight:700;display:flex;gap:10px;align-items:flex-start;letter-spacing:-.01em}
+.qa b:before{content:"Q";color:var(--accent);font-weight:800}
+.qa p{font-size:14.5px;color:var(--muted);line-height:1.6;margin-top:9px;padding-left:22px}
+
+/* zones + autres métiers */
+.zones{max-width:860px;margin:0 auto;text-align:center}
+.zones .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:22px}
+.zones .chips span{font-size:14px;font-weight:500;color:var(--ink2);background:var(--card);border:1px solid var(--line-s);padding:8px 16px;border-radius:999px}
+.others{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
+.others a{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink2);background:var(--card);border:1px solid var(--line-s);padding:9px 16px;border-radius:999px;transition:transform .2s,box-shadow .2s}
+.others a:hover{transform:translateY(-2px);box-shadow:var(--sh-s)}
+.others a i{width:11px;height:11px;border-radius:50%}
+
+/* contact band */
+.cband{background:#0f2538;color:#fff;border-radius:var(--r);padding:clamp(34px,5vh,54px);text-align:center;position:relative;overflow:hidden;box-shadow:var(--sh)}
+.cband:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(198,160,82,.18),transparent 65%);top:-160px;right:-120px}
+.cband h2{color:#fff;font-size:clamp(25px,3.2vw,38px);font-weight:800;letter-spacing:-.02em;position:relative}
+.cband p{color:#c6cdd4;font-size:16px;margin-top:14px;position:relative}
+.cband .row{display:flex;flex-wrap:wrap;gap:13px;justify-content:center;margin-top:26px;position:relative}
+.cband .btn.gold{background:var(--gold);color:#2a2008}
+.cband .phone{display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:800;font-size:19px;color:#fff;padding:13px 20px}
+
+/* footer */
+.ft{background:#0b1a28;color:#aab4bf;padding:52px 0 26px;margin-top:0}
+.ft .top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:34px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ft .logo .s{background:var(--blue)}.ft .logo b{color:#fff}.ft .logo span{color:#7f8c99}
+.ft .about{font-size:13.5px;color:#8c97a2;margin-top:15px;line-height:1.65;max-width:36ch}
+.ft h4{color:#fff;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 14px;font-weight:600;font-family:var(--fd)}
+.ft a{display:block;font-size:13.5px;color:#9aa5b1;margin-bottom:10px}.ft a:hover{color:#fff}
+.ft .zones2{font-size:13.5px;color:#8c97a2;line-height:1.7}
+.ft .bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:22px;font-size:12px;color:#6b7682}
+
+@media(max-width:940px){
+  .menu{display:none}.burger{display:block}
+  .mhero .in{grid-template-columns:1fr;gap:30px}.mvis{order:-1;aspect-ratio:16/10}
+  .igrid{grid-template-columns:1fr 1fr}
+  .pv{flex-direction:column;text-align:center}
+  .ft .top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .igrid{grid-template-columns:1fr}.ft .top{grid-template-columns:1fr;gap:26px}
+  .logo span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="wrap in">
+    <a class="logo" href="#"><span class="s">AC</span><span><b>Artisan de Confiance</b><span>Rénovation · Bouches-du-Rhône</span></span></a>
+    <nav class="menu">
+      <a class="lk" href="#">Le concept</a>
+      <a class="lk" href="#">Accompagnement</a>
+      <a class="lk" href="#">Les métiers</a>
+      <a class="lk" href="#">Réalisations</a>
+      <a class="lk mgmt" href="https://espace-chantier-adc13.fly.dev" target="_blank" rel="noopener" title="Accès professionnel (protégé par mot de passe)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Gestion de chantier</a>
+      <a class="btn g" href="#contact" style="padding:10px 18px;font-size:14px">Décrire mon projet</a>
+    </nav>
+    <button class="burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+</header>
+
+<!-- HERO MÉTIER -->
+<section class="mhero">
+  <div class="wrap in">
+    <div class="mtext">
+      <div class="crumb"><a href="#">Accueil</a> › <a href="#">Les métiers</a> › <span>Plomberie</span></div>
+      <div class="mbadge">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 12 3 12 3z"/></svg></span>
+        <span class="fam">Lots techniques · CVC</span>
+      </div>
+      <h1>Plombier de confiance,<br>partout dans le 13.</h1>
+      <p class="lead">La plomberie, c'est le <b>cœur du confort au quotidien</b> — et le premier poste qu'un acheteur inspecte. Notre réseau réunit des plombiers sélectionnés pour vos dépannages, installations et rénovations, coordonnés par un seul interlocuteur.</p>
+      <div class="mcta">
+        <a class="btn g" href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.2L4 17.5V4Z"/><path d="M8 9h8M8 12h5"/></svg> Décrire mon projet</a>
+        <a class="btn ghost" href="tel:+33637759206"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z"/></svg> 06 37 75 92 06</a>
+      </div>
+    </div>
+    <div class="mvis">
+      <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 12 3 12 3z"/></svg></div>
+      <span class="ph">Photo de chantier · plomberie</span>
+    </div>
+  </div>
+</section>
+
+<!-- INTERVENTIONS -->
+<section class="sec" id="interventions">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Nos interventions</span>
+      <h2>Tout ce que couvre la plomberie.</h2>
+      <p>Du petit dépannage à la rénovation complète du réseau, un plombier de confiance pour chaque besoin.</p>
+    </div>
+    <div class="igrid">
+      <div class="icard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7l3-3 3 3-3 3M17 4v9a4 4 0 0 1-4 4H6"/><path d="M6 13l-3 3 3 3"/></svg></div><h3>Dépannage &amp; urgences</h3><p>Fuite, perte de pression, robinetterie, canalisation bouchée : une intervention rapide pour limiter les dégâts.</p></div>
+      <div class="icard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><h3>Recherche de fuite</h3><p>Détection non destructive (acoustique, thermique) et rapport pour votre assurance, réparation dans la foulée.</p></div>
+      <div class="icard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3v3a1 1 0 0 1-1 1h-5M6 9h10l-1.5 3.5H7.5z"/><path d="M8.5 16v2M12 16.5v2.5M14.5 16v2"/></svg></div><h3>Installation sanitaire</h3><p>WC, lavabo, douche à l'italienne, baignoire : pose soignée et finitions impeccables.</p></div>
+      <div class="icard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div><h3>Rénovation du réseau</h3><p>Remplacement de la tuyauterie, mise aux normes, reprise complète lors d'une rénovation.</p></div>
+      <div class="icard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 7h4M12 15a2 2 0 1 0 0 .01"/></svg></div><h3>Chauffe-eau &amp; eau chaude</h3><p>Réparation, remplacement et installation (électrique, thermodynamique) pour de l'eau chaude fiable.</p></div>
+      <div class="icard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8q3-3 6 0t6 0 6 0M3 13q3-3 6 0t6 0 6 0M3 18q3-3 6 0t6 0 6 0"/></svg></div><h3>Raccordements</h3><p>Cuisine, buanderie, arrivée et évacuation extérieures : des raccordements propres et durables.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLUS-VALUE -->
+<section class="sec soft">
+  <div class="wrap">
+    <div class="pv">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7M17 8h4v4"/></svg></span>
+      <div><b>Une plomberie saine et aux normes rassure immédiatement un acheteur.</b><p>C'est l'un des premiers points vérifiés lors d'une vente — et un poste qui évite les mauvaises surprises. Bien fait, il protège la valeur de votre bien.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="shead"><span class="eyebrow">Questions fréquentes</span><h2>Vous vous demandez…</h2></div>
+    <div class="faq">
+      <div class="qa"><b>Intervenez-vous en urgence ?</b><p>Oui, dès que possible selon la nature du problème. Appelez le 06 37 75 92 06 et on organise l'intervention au plus vite.</p></div>
+      <div class="qa"><b>Le devis est-il gratuit ?</b><p>Oui, systématiquement, et sans engagement. On vous explique clairement ce qui est nécessaire et ce qui peut attendre.</p></div>
+      <div class="qa"><b>Faites-vous la recherche de fuite non destructive ?</b><p>Oui : détection acoustique et thermique, avec un rapport pour votre assurance, puis réparation dans la foulée.</p></div>
+      <div class="qa"><b>Dans quelles villes intervenez-vous ?</b><p>Marseille, Aix-en-Provence, Aubagne, Salon, Martigues et tout le département des Bouches-du-Rhône.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONES + AUTRES MÉTIERS -->
+<section class="sec soft">
+  <div class="wrap zones">
+    <span class="eyebrow">Zones d'intervention</span>
+    <h2 style="margin-top:14px">Un plombier de confiance près de chez vous.</h2>
+    <div class="chips"><span>Marseille</span><span>Aix-en-Provence</span><span>Aubagne</span><span>Salon-de-Provence</span><span>Martigues</span><span>Tout le 13</span></div>
+    <p style="margin-top:36px;color:var(--muted);font-size:15px">Besoin d'un autre corps de métier pour votre projet ?</p>
+    <div class="others">
+      <a href="#"><i style="background:#eaa92a"></i>Électricité</a>
+      <a href="#"><i style="background:#7d4ea6"></i>Chauffage · Clim</a>
+      <a href="#"><i style="background:#74838c"></i>Carrelage</a>
+      <a href="#"><i style="background:#a8812e"></i>Rénovation</a>
+      <a href="#"><i style="background:#1a4a6e"></i>Voir tous les métiers</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="cband">
+      <h2>Un projet de plomberie ?</h2>
+      <p>Décrivez-le en quelques mots — on revient vers vous rapidement pour fixer le rendez-vous.</p>
+      <div class="row">
+        <a class="btn gold" href="#">Décrire mon projet</a>
+        <a class="phone" href="tel:+33637759206"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z"/></svg>06 37 75 92 06</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <a class="logo" href="#"><span class="s">AC</span><span><b>Artisan de Confiance</b><span>Rénovation · Bouches-du-Rhône</span></span></a>
+        <p class="about">Un réseau d'artisans de confiance, orchestré par Diego Rodriguez. Des travaux qui valorisent votre bien, du gros œuvre aux finitions.</p>
+      </div>
+      <div><h4>Le réseau</h4><a href="#">Le concept</a><a href="#">Accompagnement</a><a href="#">Les métiers</a><a href="#">Réalisations</a><a href="https://espace-chantier-adc13.fly.dev" target="_blank" rel="noopener">Espace Chantier ↗</a></div>
+      <div><h4>Contact</h4><a href="tel:+33637759206">06 37 75 92 06</a><a href="mailto:contact@reseauxartisansdeconfiance13.fr">contact@reseauxartisansdeconfiance13.fr</a><h4 style="margin-top:20px">Zones</h4><p class="zones2">Marseille · Aix-en-Provence · Aubagne · Salon · Martigues · tout le 13.</p></div>
+    </div>
+    <div class="bottom"><span>© 2026 Artisan de Confiance</span><span>Rénovation &amp; valorisation immobilière · Bouches-du-Rhône</span></div>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","serviceType":"Plomberie","provider":{"@type":"Organization","name":"Artisan de Confiance","telephone":"+33637759206","areaServed":["Marseille","Aix-en-Provence","Aubagne","Salon-de-Provence","Martigues","Bouches-du-Rhône"]},"areaServed":"Bouches-du-Rhône","description":"Dépannage, recherche de fuite, installation sanitaire et rénovation de réseau par un réseau de plombiers de confiance dans le 13."}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Intervenez-vous en urgence ?","acceptedAnswer":{"@type":"Answer","text":"Oui, dès que possible selon la nature du problème. Appelez le 06 37 75 92 06."}},{"@type":"Question","name":"Le devis est-il gratuit ?","acceptedAnswer":{"@type":"Answer","text":"Oui, systématiquement et sans engagement."}},{"@type":"Question","name":"Faites-vous la recherche de fuite non destructive ?","acceptedAnswer":{"@type":"Answer","text":"Oui : détection acoustique et thermique, avec rapport pour l'assurance, puis réparation."}},{"@type":"Question","name":"Dans quelles villes intervenez-vous ?","acceptedAnswer":{"@type":"Answer","text":"Marseille, Aix-en-Provence, Aubagne, Salon, Martigues et tout le 13."}}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil"},{"@type":"ListItem","position":2,"name":"Les métiers"},{"@type":"ListItem","position":3,"name":"Plomberie"}]}
+</script>
+<script>
+document.documentElement.classList.remove('nojs');
+document.querySelector('.burger').addEventListener('click',()=>document.querySelector('#contact').scrollIntoView({behavior:'smooth'}));
+</script>
+</body>
+</html>
